@@ -12,12 +12,15 @@ class GBLoggingSettings:
             DEBUG_LOG=True,
             INFO_LOG=True,
             ERROR_LOG=True,
-            FORMAT='json',
+            FORMAT='default',
             ADMIN_LOGGING=False,
             LOG_LEVEL='debug',
             INFO=False,
             DISABLE_EXISTING_LOGGERS=True,
-            LOG_PATH='{}/logs'.format(django_settings.BASE_DIR)
+            LOG_PATH='{}/logs'.format(django_settings.BASE_DIR),
+            IGNORED_PATHS=['/admin', '/static'],
+            INFO_FIELDS=('datetime', 'method', 'path', 'request_type', 'request_length',
+                         'response_status', 'response_reason')
         )
 
         try:

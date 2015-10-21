@@ -1,6 +1,6 @@
 import logging
 import os
-
+import sys
 from . import settings
 
 LOG_LEVEL = settings.LOG_LEVEL.upper()
@@ -29,13 +29,13 @@ LOGGING = {
             'format': '[%(levelname)s - %(created)s], file:%(module)s.py, func:%(funcName)s, ln:%(lineno)s: %(message)s'
         },
         'simple': {
-            'format': '%(levelname)s %(message)s'
+            'format': '%(message)s'
         },
     },
     'handlers': {
         'console': {
             'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
+            'class': 'django-logging.handlers.ConsoleHandler',
             'formatter': 'verbose',
         },
         'debug': {
