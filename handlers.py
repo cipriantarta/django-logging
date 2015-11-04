@@ -34,7 +34,7 @@ class InfoFileHandler(FileHandler):
 
         if settings.FORMAT.lower() == 'json':
             return json.dumps(formatted)
-        elif settings.FORMAT.lower() == 'default':
+        else:
             return ' '.join(str(v) for v in formatted.values())
 
 
