@@ -20,7 +20,8 @@ class GBLoggingSettings:
             LOG_PATH='{}/logs'.format(django_settings.BASE_DIR),
             IGNORED_PATHS=['/admin', '/static'],
             INFO_FIELDS=('datetime', 'method', 'path', 'request_type', 'request_length',
-                         'response_status', 'response_reason')
+                         'response_status', 'response_reason'),
+            LOG_RESPONSE_JSON_ONLY=True
         )
 
         try:

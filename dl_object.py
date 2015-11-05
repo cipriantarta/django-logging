@@ -47,4 +47,6 @@ class DLObject:
             charset=self.response.charset,
             content=self.response.content.decode(),
         )
+        if settings.LOG_RESPONSE_JSON_ONLY and 'application/json' not in self.response['Content-Type']:
+            result['content'] = ''
         return result
