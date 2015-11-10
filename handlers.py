@@ -1,16 +1,17 @@
 import json
+import sys
 from datetime import datetime
-from .dl_object import DLObject
+from .log_object import LogObject
 from logging import FileHandler, StreamHandler
 from . import settings
 
 
-class InfoFileHandler(FileHandler):
+class DLFileHandler(FileHandler):
     def emit(self, record):
         return super().emit(record)
 
     def format(self, record):
-        if not isinstance(record.msg, DLObject):
+        if not isinstance(record.msg, LogObject):
             return super().format(record)
 
         message = record.msg.to_dict
@@ -38,28 +39,12 @@ class InfoFileHandler(FileHandler):
             return ' '.join(str(v) for v in formatted.values())
 
 
-class ErrorFileHandler(FileHandler):
-    def emit(self, record):
-        pass
-
-
-class DebugFileHandler(FileHandler):
-    def emit(self, record):
-        return super().emit(record)
-
-    def format(self, record):
-        if isinstance(record.msg, DLObject):
-            message = record.msg.to_dict
-
-        return json.dumps(message)
-
-
 class ConsoleHandler(StreamHandler):
     def emit(self, record):
         return super().emit(record)
 
     def format(self, record):
-        if isinstance(record.msg, DLObject):
-            message = record.msg.to_dict
+        if not isinstance(record.msg, LogObject):
+            return super().format(record)
 
-        return json.dumps(message)
+        return json.dumps(record.msg.to_dict)

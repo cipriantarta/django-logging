@@ -1,6 +1,5 @@
 import logging
 import os
-import sys
 from . import settings
 
 LOG_LEVEL = settings.LOG_LEVEL.upper()
@@ -8,12 +7,6 @@ LOG_HANDLERS = ['error']
 
 if settings.CONSOLE_LOG:
     LOG_HANDLERS.append('console')
-
-if settings.INFO_LOG:
-    LOG_HANDLERS.append('info')
-
-if settings.DEBUG_LOG:
-    LOG_HANDLERS.append('debug')
 
 if not os.path.exists(settings.LOG_PATH):
     try:
@@ -38,27 +31,14 @@ LOGGING = {
             'class': 'django-logging.handlers.ConsoleHandler',
             'formatter': 'verbose',
         },
-        'debug': {
-            'level': 'DEBUG',
-            'class': 'django-logging.handlers.DebugFileHandler',
+        'default': {
+            'level': settings.LEVEL,
+            'class': 'django-logging.handlers.DLFileHandler',
             'formatter': 'verbose',
-            'filename': '{}/debug.log'.format(settings.LOG_PATH)
-        },
-        'info': {
-            'level': 'INFO',
-            'class': 'django-logging.handlers.InfoFileHandler',
-            'formatter': 'verbose',
-            'filename': '{}/info.log'.format(settings.LOG_PATH)
-        },
-        'error': {
-            'level': 'ERROR',
-            'class': 'django-logging.handlers.ErrorFileHandler',
-            'formatter': 'verbose',
-            'filename': '{}/error.log'.format(settings.LOG_PATH)
         },
     },
     'loggers': {
-        'gb_logger': {
+        'dl_logger': {
             'handlers': LOG_HANDLERS,
             'level': LOG_LEVEL,
             'propagate': True
@@ -69,6 +49,6 @@ logging.config.dictConfig(LOGGING)
 
 
 def get_logger():
-    logger = logging.getLogger('gb_logger')
+    logger = logging.getLogger('dl_logger')
     logger.setLevel(logging.getLevelName(LOG_LEVEL))
     return logger

@@ -9,18 +9,14 @@ class GBLoggingSettings:
         user_settings = getattr(django_settings, 'GB_LOGGING', None)
         self.__settings = dict(
             CONSOLE_LOG=True,
-            DEBUG_LOG=True,
-            INFO_LOG=True,
-            ERROR_LOG=True,
             FORMAT='default',
-            ADMIN_LOGGING=False,
             LOG_LEVEL='debug',
             INFO=False,
             DISABLE_EXISTING_LOGGERS=True,
             LOG_PATH='{}/logs'.format(django_settings.BASE_DIR),
-            IGNORED_PATHS=['/admin', '/static'],
-            INFO_FIELDS=('datetime', 'method', 'path', 'request_type', 'request_length',
-                         'response_status', 'response_reason'),
+            IGNORED_PATHS=['/admin', '/static', '/favicon.ico'],
+            FIELDS=('datetime', 'method', 'path', 'request_type', 'request_length',
+                    'response_status', 'response_reason'),
             LOG_RESPONSE_JSON_ONLY=True
         )
 
