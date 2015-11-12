@@ -1,42 +1,32 @@
 import json
-import sys
-from datetime import datetime
-from .log_object import LogObject
-from logging import FileHandler, StreamHandler
-from . import settings
+import gzip
+import time
+from logging import StreamHandler
+from logging.handlers import RotatingFileHandler
+from .log_object import LogObject, ErrorLogObject
 
 
-class DLFileHandler(FileHandler):
+class AppFileHandler(RotatingFileHandler):
     def emit(self, record):
+        if not isinstance(record.msg, LogObject) and not isinstance(record.msg, ErrorLogObject):
+            return
         return super().emit(record)
 
     def format(self, record):
-        if not isinstance(record.msg, LogObject):
-            return super().format(record)
+        created = int(record.created)
+        message = {record.levelname: {created: record.msg.to_dict}}
 
-        message = record.msg.to_dict
+        return json.dumps(message)
 
-        formatted = dict()
-        for field in settings.INFO_FIELDS:
-            if field == 'datetime':
-                formatted[field] = datetime.fromtimestamp(record.created).isoformat()
-            if field == 'method':
-                formatted[field] = message['request']['method']
-            if field == 'path':
-                formatted[field] = message['request']['path']
-            if field == 'request_type':
-                formatted[field] = message['request']['meta']['content_type']
-            if field == 'request_length':
-                formatted[field] = message['request']['meta']['content_length']
-            if field == 'response_status':
-                formatted[field] = message['response']['status']
-            if field == 'response_reason':
-                formatted[field] = message['response']['reason']
+    def rotation_filename(self, default_name):
+        return '{}-{}.gz'.format(default_name, time.strftime('%Y%m%d'))
 
-        if settings.FORMAT.lower() == 'json':
-            return json.dumps(formatted)
-        else:
-            return ' '.join(str(v) for v in formatted.values())
+    def rotate(self, source, dest):
+        with open(source, 'rb+') as fh_in:
+            with gzip.open(dest, 'wb') as fh_out:
+                fh_out.writelines(fh_in)
+            fh_in.seek(0)
+            fh_in.truncate()
 
 
 class ConsoleHandler(StreamHandler):
@@ -44,7 +34,13 @@ class ConsoleHandler(StreamHandler):
         return super().emit(record)
 
     def format(self, record):
-        if not isinstance(record.msg, LogObject):
+        if isinstance(record.msg, LogObject):
+            created = int(record.created)
+            message = {record.levelname: {created: record.msg.to_dict}}
+
+            return json.dumps(message)
+        elif isinstance(record.msg, ErrorLogObject):
+            return str(record.msg)
+        else:
             return super().format(record)
 
-        return json.dumps(record.msg.to_dict)

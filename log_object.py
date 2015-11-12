@@ -1,18 +1,21 @@
+import abc
+import sys
+import traceback
+
+from django.http import HttpResponseServerError
+from django.views import debug
+
 from . import settings
 
 
-class LogObject:
-    def __init__(self, request, response):
+class BaseLogObject(metaclass=abc.ABCMeta):
+    def __init__(self, request):
+        super().__init__()
         self.request = request
-        self.response = response
 
-    @property
+    @abc.abstractproperty
     def to_dict(self):
-        result = dict(
-            request=self.format_request(),
-            response=self.format_response()
-        )
-        return result
+        raise NotImplementedError
 
     def format_request(self):
         meta_keys = ['PATH_INFO', 'HTTP_X_SCHEME', 'REMOTE_ADDR',
@@ -39,6 +42,20 @@ class LogObject:
 
         return result
 
+
+class LogObject(BaseLogObject):
+    def __init__(self, request, response):
+        super().__init__(request)
+        self.response = response
+
+    @property
+    def to_dict(self):
+        result = dict(
+            request=self.format_request(),
+            response=self.format_response()
+        )
+        return result
+
     def format_response(self):
         result = dict(
             status=self.response.status_code,
@@ -47,6 +64,58 @@ class LogObject:
             charset=self.response.charset,
             content=self.response.content.decode(),
         )
-        if settings.LOG_RESPONSE_JSON_ONLY and 'application/json' not in self.response['Content-Type']:
-            result['content'] = ''
+        if settings.CONTENT_JSON_ONLY:
+            del result['content']
+
+        for field in result.keys():
+            if field not in settings.RESPONSE_FIELDS:
+                del result[field]
         return result
+
+
+class ErrorLogObject(BaseLogObject):
+    def __init__(self, request, exception):
+        super().__init__(request)
+        self.exception = exception
+        self.__traceback = None
+
+    @property
+    def to_dict(self):
+        return dict(
+            request=self.format_request(),
+            exception=self.format_exception()
+        )
+
+    @classmethod
+    def format_traceback(cls, tb):
+        tb = traceback.extract_tb(tb)
+        for i in tb:
+            yield {'file': i[0], 'line': i[1], 'method': i[2]}
+
+    def format_exception(self):
+        result = dict(
+            message=str(self.exception),
+            traceback=list()
+        )
+        if sys.version_info[0] == 2:
+            _, _, self.__traceback = traceback.sys.exc_info()
+        else:
+            self.__traceback = traceback.TracebackException.from_exception(self.exception).exc_traceback
+
+        for line in self.format_traceback(self.__traceback):
+            result['traceback'].append(line)
+        return result
+
+    @property
+    def response(self):
+        if settings.DEBUG:
+            return debug.technical_500_response(self.request, type(self.exception), self.exception, self.__traceback)
+        else:
+            return HttpResponseServerError(content=b'<h1>Internal Server Error</h1>')
+
+    def __str__(self):
+        return 'Traceback (most recent call last):\n{}{}: {}'.format(
+            ''.join(traceback.format_tb(self.__traceback)),
+            str(type(self.exception)).split('\'')[1], str(self.exception)
+        )
+

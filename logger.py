@@ -3,7 +3,7 @@ import os
 from . import settings
 
 LOG_LEVEL = settings.LOG_LEVEL.upper()
-LOG_HANDLERS = ['error']
+LOG_HANDLERS = ['default']
 
 if settings.CONSOLE_LOG:
     LOG_HANDLERS.append('console')
@@ -33,8 +33,11 @@ LOGGING = {
         },
         'default': {
             'level': settings.LEVEL,
-            'class': 'django-logging.handlers.DLFileHandler',
+            'class': 'django-logging.handlers.AppFileHandler',
             'formatter': 'verbose',
+            'maxBytes': settings.ROTATE_MB,
+            'backupCount': settings.ROTATE_COUNT,
+            'filename': '{}/app.log'.format(settings.LOG_PATH)
         },
     },
     'loggers': {
