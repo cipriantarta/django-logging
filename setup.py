@@ -1,20 +1,29 @@
 import os
-from setuptools import setup
+import re
+from setuptools import setup, find_packages
 
 
-with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
-    README = readme.read()
+def readme():
+    with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
+        return readme.read()
 
-os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
+
+def version():
+    pattern = re.compile(r'__version__ = \'([\d\.]+)\'')
+    with open('__init__.py') as f:
+        data = f.read()
+        return re.search(pattern, data).group(1)
+
+
 
 setup(
     name='django-logging',
-    version='1.0',
-    packages=['django-logging'],
+    version=version(),
+    packages=find_packages(),
     include_package_data=True,
     license='GNU License',  # example license
     description='A simple Django app to log requests/responses in various formats, such as JSON.',
-    long_description=README,
+    long_description=readme(),
     url='https://github.com/cipriantarta/django-logging',
     author='Ciprian Tarta',
     author_email='me@cipriantarta.ro',
@@ -22,12 +31,11 @@ setup(
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU License', # example license
+        'License :: OSI Approved :: GNU License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        # Replace these appropriately if you are stuck on Python 2.
         'Programming Language :: Python :: 3',
-        'Topic :: Internet :: WWW/HTTP',
-        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ],
+    keywords='django logging json'
 )
