@@ -1,7 +1,8 @@
 Django Logging
 ==============
 
-A Django library that automatically logs request/response info in various formats, such as json, etc., which can later be sent to a log service such as sentry, splunk or others.
+A Django library that logs request, response and exception details in a JSON document.
+It users the python rotation mechanism to rotate the file logs, but the rotation files will be gziped.
 
 Quick start
 ===========
