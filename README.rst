@@ -2,7 +2,7 @@ Django Logging
 ==============
 
 A Django library that logs request, response and exception details in a JSON document.
-It users the python rotation mechanism to rotate the file logs, but the rotation files will be gziped.
+It uses the python rotation mechanism to rotate the file logs, but the rotation files will be gziped.
 
 Quick start
 ===========
