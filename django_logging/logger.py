@@ -36,7 +36,7 @@ LOGGING = {
             'level': settings.LEVEL,
             'class': 'django_logging.handlers.AppFileHandler',
             'formatter': 'verbose',
-            'maxBytes': settings.ROTATE_MB,
+            'maxBytes': settings.ROTATE_MB * 1024 * 1024,
             'backupCount': settings.ROTATE_COUNT,
             'filename': '{}/app.log'.format(settings.LOG_PATH)
         },

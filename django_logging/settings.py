@@ -10,14 +10,14 @@ class DjangoLoggingSettings:
         self.__settings = dict(
             DEBUG=django_settings.DEBUG,
             CONSOLE_LOG=True,
-            LOG_LEVEL='debug',
+            LOG_LEVEL='debug' if django_settings.DEBUG else 'info',
             INFO=False,
             DISABLE_EXISTING_LOGGERS=True,
             LOG_PATH='{}/logs'.format(django_settings.BASE_DIR),
             IGNORED_PATHS=['/admin', '/static', '/favicon.ico'],
             RESPONSE_FIELDS=('status', 'reason', 'charset', 'headers', 'content'),
             CONTENT_JSON_ONLY=True,
-            ROTATE_MB=100*1024*1024,
+            ROTATE_MB=100,
             ROTATE_COUNT=10
         )
 
