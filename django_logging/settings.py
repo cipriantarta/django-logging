@@ -2,11 +2,11 @@ import sys
 from django.conf import settings as django_settings
 
 
-class GBLoggingSettings:
+class DjangoLoggingSettings:
     __settings = None
 
     def __init__(self):
-        user_settings = getattr(django_settings, 'GB_LOGGING', None)
+        user_settings = getattr(django_settings, 'DJANGO_LOGGING', None)
         self.__settings = dict(
             DEBUG=django_settings.DEBUG,
             CONSOLE_LOG=True,
@@ -30,4 +30,4 @@ class GBLoggingSettings:
         return self.__settings.get(name)
             
 
-sys.modules[__name__] = GBLoggingSettings()
+sys.modules[__name__] = DjangoLoggingSettings()
