@@ -20,7 +20,7 @@ setup(
     version=version(),
     packages=find_packages(),
     include_package_data=True,
-    license='GNU License',  # example license
+    license='BSD',
     description='A simple Django app to log requests/responses in various formats, such as JSON.',
     long_description=readme(),
     url='https://github.com/cipriantarta/django-logging',
@@ -30,7 +30,7 @@ setup(
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU License',
+        'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
