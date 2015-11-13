@@ -29,7 +29,7 @@ Settings
 ========
 Inspired by Django Rest Framework, Django Logging settings are grouped in a single dictionary.
 
-To overwrite Django Logging settings, add a dictionary in your project's settings file
+To override Django Logging settings, add a dictionary in your project's settings file
 
 .. code-block:: python
 
