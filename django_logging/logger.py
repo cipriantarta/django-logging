@@ -1,5 +1,6 @@
 import logging
 import os
+
 from . import settings
 
 LOG_LEVEL = settings.LOG_LEVEL.upper()
@@ -28,12 +29,12 @@ LOGGING = {
     'handlers': {
         'console': {
             'level': 'DEBUG',
-            'class': 'django-logging.handlers.ConsoleHandler',
+            'class': 'django_logging.handlers.ConsoleHandler',
             'formatter': 'verbose',
         },
         'default': {
             'level': settings.LEVEL,
-            'class': 'django-logging.handlers.AppFileHandler',
+            'class': 'django_logging.handlers.AppFileHandler',
             'formatter': 'verbose',
             'maxBytes': settings.ROTATE_MB,
             'backupCount': settings.ROTATE_COUNT,

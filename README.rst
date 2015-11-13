@@ -14,7 +14,7 @@ Quick start
 
     INSTALLED_APPS = (
         ...
-        'django-logging',
+        'django_logging',
     )
 
 
@@ -23,6 +23,6 @@ Quick start
 .. code-block:: python
 
     MIDDLEWARE_CLASSES = (
-        'django-logging.middleware.DjangoLoggingMiddleware',
+        'django_logging.middleware.DjangoLoggingMiddleware',
         ...
     )

@@ -10,10 +10,9 @@ def readme():
 
 def version():
     pattern = re.compile(r'__version__ = \'([\d\.]+)\'')
-    with open('__init__.py') as f:
+    with open(os.path.join('django_logging', '__init__.py')) as f:
         data = f.read()
         return re.search(pattern, data).group(1)
-
 
 
 setup(
