@@ -97,6 +97,26 @@ Log format:
     [%(levelname)s - %(created)s], file:%(module)s.py, func:%(funcName)s, ln:%(lineno)s: %(message)s
 
 
+Custom Use
+==========
+
+
+To log debug messages:
+
+.. code-block:: python
+
+    from django_logging import log
+
+    log.debug('debug message')
+
+To log handled exceptions:
+
+.. code-block:: python
+
+    from django_logging import log, ErrorLogObject
+
+    log.error(ErrorLogObject(request, exception))
+
 Settings
 ========
 Inspired by Django Rest Framework, Django Logging settings are grouped in a single dictionary.
