@@ -13,6 +13,11 @@ Installation
 
     pip install git+https://github.com/cipriantarta/django-logging
 
+or
+
+.. code-block:: python
+
+    pip install django-logging-json
 
 Quick start
 ===========

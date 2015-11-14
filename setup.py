@@ -16,7 +16,7 @@ def version():
 
 
 setup(
-    name='django-logging',
+    name='django-logging-json',
     version=version(),
     packages=find_packages(),
     include_package_data=True,
