@@ -8,6 +8,8 @@ LOG_HANDLERS = ['default']
 
 if settings.CONSOLE_LOG:
     LOG_HANDLERS.append('console')
+if settings.DEBUG:
+    LOG_HANDLERS.append('debug')
 
 if not os.path.exists(settings.LOG_PATH):
     try:
@@ -33,12 +35,20 @@ LOGGING = {
             'formatter': 'verbose',
         },
         'default': {
-            'level': settings.LEVEL,
+            'level': 'INFO',
             'class': 'django_logging.handlers.AppFileHandler',
             'formatter': 'verbose',
             'maxBytes': settings.ROTATE_MB * 1024 * 1024,
             'backupCount': settings.ROTATE_COUNT,
             'filename': '{}/app.log'.format(settings.LOG_PATH)
+        },
+        'debug': {
+            'level': 'DEBUG',
+            'class': 'django_logging.handlers.DebugFileHandler',
+            'formatter': 'verbose',
+            'maxBytes': settings.ROTATE_MB * 1024 * 1024,
+            'backupCount': settings.ROTATE_COUNT,
+            'filename': '{}/debug.log'.format(settings.LOG_PATH)
         },
     },
     'loggers': {
