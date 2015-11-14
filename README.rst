@@ -68,7 +68,7 @@ Request and Exception
 .. code-block:: javascript
 
     {
-        "INFO":
+        "ERROR":
         {
             "timestamp":
             {
