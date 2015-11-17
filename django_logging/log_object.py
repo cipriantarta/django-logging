@@ -95,6 +95,7 @@ class ErrorLogObject(BaseLogObject):
     def format_exception(self):
         result = dict(
             message=str(self.exception),
+            type=self.exception_type,
             traceback=list()
         )
         if sys.version_info[0] == 2:
@@ -116,6 +117,10 @@ class ErrorLogObject(BaseLogObject):
     def __str__(self):
         return 'Traceback (most recent call last):\n{}{}: {}'.format(
             ''.join(traceback.format_tb(self.__traceback)),
-            str(type(self.exception)).split('\'')[1], str(self.exception)
+            self.exception_type, str(self.exception)
         )
+
+    @property
+    def exception_type(self):
+        return str(type(self.exception)).split('\'')[1]
 

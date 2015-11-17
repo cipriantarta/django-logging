@@ -181,3 +181,11 @@ Maximum size in MB that the log file can have before it gets rotated.
 
     ROTATE_COUNT = 10
 Maximum number of rotated log files.
+
+
+Change Log
+==========
+
+1.1 [2015-11-17]
+----------------
+ - added exception "type" for exception log entries
