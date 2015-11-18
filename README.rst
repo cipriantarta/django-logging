@@ -190,6 +190,7 @@ master
 ------
  - log entries are now sorted by keys
  - console handler now indents the log entries by 4 spaces
+ - log response content if it's JSON (bug)
 
 1.1 [2015-11-17]
 ----------------

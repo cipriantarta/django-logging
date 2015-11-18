@@ -1,4 +1,5 @@
 import abc
+import json
 import sys
 import traceback
 
@@ -65,7 +66,10 @@ class LogObject(BaseLogObject):
             content=self.response.content.decode(),
         )
         if settings.CONTENT_JSON_ONLY:
-            del result['content']
+            try:
+                result['content'] = json.loads(result['content'])
+            except ValueError:
+                del result['content']
 
         for field in result.keys():
             if field not in settings.RESPONSE_FIELDS:
