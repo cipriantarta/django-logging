@@ -16,7 +16,7 @@ class AppFileHandler(RotatingFileHandler):
         created = int(record.created)
         message = {record.levelname: {created: record.msg.to_dict}}
 
-        return json.dumps(message)
+        return json.dumps(message, sort_keys=True)
 
     def rotation_filename(self, default_name):
         return '{}-{}.gz'.format(default_name, time.strftime('%Y%m%d'))
@@ -54,7 +54,7 @@ class ConsoleHandler(StreamHandler):
             created = int(record.created)
             message = {record.levelname: {created: record.msg.to_dict}}
 
-            return json.dumps(message)
+            return json.dumps(message, sort_keys=True, indent=4)
         elif isinstance(record.msg, ErrorLogObject):
             return str(record.msg)
         else:

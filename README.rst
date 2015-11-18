@@ -186,6 +186,11 @@ Maximum number of rotated log files.
 Change Log
 ==========
 
+master
+------
+ - log entries are now sorted by keys
+ - console handler now indents the log entries by 4 spaces
+
 1.1 [2015-11-17]
 ----------------
  - added exception "type" for exception log entries
