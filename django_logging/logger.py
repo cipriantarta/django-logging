@@ -10,6 +10,8 @@ if settings.CONSOLE_LOG:
     LOG_HANDLERS.append('console')
 if settings.DEBUG:
     LOG_HANDLERS.append('debug')
+if settings.SQL_LOG:
+    LOG_HANDLERS.append('sql')
 
 if not os.path.exists(settings.LOG_PATH):
     try:
@@ -26,6 +28,9 @@ LOGGING = {
         },
         'simple': {
             'format': '%(message)s'
+        },
+        'sql': {
+            'format': '[%(levelname)s - %(created)s] %(duration)s %(sql)s %(params)s'
         },
     },
     'handlers': {
@@ -50,6 +55,14 @@ LOGGING = {
             'backupCount': settings.ROTATE_COUNT,
             'filename': '{}/debug.log'.format(settings.LOG_PATH)
         },
+        'sql': {
+            'level': 'DEBUG',
+            'class': 'django_logging.handlers.SQLFileHandler',
+            'formatter': 'sql',
+            'maxBytes': settings.ROTATE_MB * 1024 * 1024,
+            'backupCount': settings.ROTATE_COUNT,
+            'filename': '{}/sql.log'.format(settings.LOG_PATH)
+        }
     },
     'loggers': {
         'dl_logger': {

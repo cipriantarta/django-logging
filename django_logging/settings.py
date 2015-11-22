@@ -10,6 +10,7 @@ class DjangoLoggingSettings:
         self.__settings = dict(
             DEBUG=django_settings.DEBUG,
             CONSOLE_LOG=True,
+            SQL_LOG=True,
             LOG_LEVEL='debug' if django_settings.DEBUG else 'info',
             INFO=False,
             DISABLE_EXISTING_LOGGERS=True,

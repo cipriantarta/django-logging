@@ -128,3 +128,14 @@ class ErrorLogObject(BaseLogObject):
     def exception_type(self):
         return str(type(self.exception)).split('\'')[1]
 
+
+class SqlLogObject:
+    def __init__(self, query):
+        self.query = query
+
+    @property
+    def to_dict(self):
+        return dict(
+            duration=self.query['time'],
+            query=self.query['sql'],
+        )

@@ -90,6 +90,13 @@ Request and Exception
         }
     }
 
+SQLFileHandler
+--------------
+
+This handler will log all queries to ``LOG_PATH/sql.log``.
+In a production environment you should set ``LOG_LEVEL = Error`` or ``SQL_LOG = False`` to avoid performance issues.
+The queries will also be logged to the console if ``CONSOLE_LOG`` is set to ``True``
+
 DebugFileHandler
 ----------------
 
@@ -141,6 +148,10 @@ Default Settings
     CONSOLE_LOG = True
 Log to console.
 
+.. code-block:: python
+
+    SQL_LOG = True
+Log SQL queries.
 
 .. code-block:: python
 
@@ -186,8 +197,9 @@ Maximum number of rotated log files.
 Change Log
 ==========
 
-master
-------
+1.2 [2015-11-22]
+----------------
+ - added sql logging support
  - log entries are now sorted by keys
  - console handler now indents the log entries by 4 spaces
  - log response content if it's JSON (bug)
