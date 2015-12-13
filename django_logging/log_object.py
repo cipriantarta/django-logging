@@ -1,5 +1,6 @@
 import abc
 import json
+import six
 import sys
 import traceback
 
@@ -9,9 +10,9 @@ from django.views import debug
 from . import settings
 
 
-class BaseLogObject(metaclass=abc.ABCMeta):
+@six.add_metaclass(abc.ABCMeta)
+class BaseLogObject(object):
     def __init__(self, request):
-        super().__init__()
         self.request = request
 
     @abc.abstractproperty
@@ -26,8 +27,12 @@ class BaseLogObject(metaclass=abc.ABCMeta):
             method=self.request.method,
             meta={key.lower(): str(value) for key, value in self.request.META.items() if key in meta_keys},
             path=self.request.path_info,
-            scheme=self.request.scheme
         )
+        try:
+            result['scheme'] = self.request.scheme
+        except AttributeError:
+            pass
+
         try:
             result['data'] = {key: value for key, value in self.request.data.items()}
         except AttributeError:
@@ -46,7 +51,7 @@ class BaseLogObject(metaclass=abc.ABCMeta):
 
 class LogObject(BaseLogObject):
     def __init__(self, request, response):
-        super().__init__(request)
+        super(LogObject, self).__init__(request)
         self.response = response
 
     @property
@@ -60,11 +65,19 @@ class LogObject(BaseLogObject):
     def format_response(self):
         result = dict(
             status=self.response.status_code,
-            reason=self.response.reason_phrase,
             headers=dict(self.response.items()),
-            charset=self.response.charset,
             content=self.response.content.decode(),
         )
+        try:
+            result['reason'] = self.response.reason_phrase
+        except AttributeError:
+            pass
+
+        try:
+            result['charset'] = self.response.charset
+        except AttributeError:
+            pass
+
         if settings.CONTENT_JSON_ONLY:
             try:
                 result['content'] = json.loads(result['content'])
@@ -79,7 +92,7 @@ class LogObject(BaseLogObject):
 
 class ErrorLogObject(BaseLogObject):
     def __init__(self, request, exception):
-        super().__init__(request)
+        super(ErrorLogObject, self).__init__(request)
         self.exception = exception
         self.__traceback = None
 
@@ -129,7 +142,7 @@ class ErrorLogObject(BaseLogObject):
         return str(type(self.exception)).split('\'')[1]
 
 
-class SqlLogObject:
+class SqlLogObject(object):
     def __init__(self, query):
         self.query = query
 

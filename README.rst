@@ -129,6 +129,7 @@ To log handled exceptions:
 
     log.error(ErrorLogObject(request, exception))
 
+
 Settings
 ========
 Inspired by Django Rest Framework, Django Logging settings are grouped in a single dictionary.
@@ -196,6 +197,12 @@ Maximum number of rotated log files.
 
 Change Log
 ==========
+
+1.3 [2015-12-13]
+----------------
+
+ - added support for Python 2.7
+ - added support for Django >= 1.4
 
 1.2 [2015-11-22]
 ----------------

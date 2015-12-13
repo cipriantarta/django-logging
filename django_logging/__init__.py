@@ -1,8 +1,9 @@
+from . import handlers
 from . import logger
-from .log_object import LogObject, ErrorLogObject
+from .log_object import LogObject, ErrorLogObject, SqlLogObject
 
 
-__version__ = '1.2'
+__version__ = '1.3'
 __author__ = 'Ciprian Tarta'
 
 log = logger.get_logger()

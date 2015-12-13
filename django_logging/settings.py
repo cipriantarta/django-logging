@@ -1,8 +1,10 @@
 import sys
+import os.path
+from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings as django_settings
 
 
-class DjangoLoggingSettings:
+class DjangoLoggingSettings(object):
     __settings = None
 
     def __init__(self):
@@ -14,7 +16,6 @@ class DjangoLoggingSettings:
             LOG_LEVEL='debug' if django_settings.DEBUG else 'info',
             INFO=False,
             DISABLE_EXISTING_LOGGERS=True,
-            LOG_PATH='{}/logs'.format(django_settings.BASE_DIR),
             IGNORED_PATHS=['/admin', '/static', '/favicon.ico'],
             RESPONSE_FIELDS=('status', 'reason', 'charset', 'headers', 'content'),
             CONTENT_JSON_ONLY=True,
@@ -22,6 +23,11 @@ class DjangoLoggingSettings:
             ROTATE_COUNT=10
         )
 
+        try:
+            self.__settings['LOG_PATH'] = os.path.join(django_settings.BASE_DIR, 'logs')
+        except AttributeError:
+            raise ImproperlyConfigured('settings.BASE_DIR is note defined. Please define settings.BASE_DIR or override '
+                                       'django_logging.LOG_PATH')
         try:
             self.__settings.update(user_settings)
         except TypeError:

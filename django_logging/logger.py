@@ -1,5 +1,8 @@
 import logging
+import logging.config
 import os
+
+import sys
 
 from . import settings
 
@@ -38,6 +41,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'django_logging.handlers.ConsoleHandler',
             'formatter': 'verbose',
+            'stream': sys.stderr
         },
         'default': {
             'level': 'INFO',
@@ -77,5 +81,5 @@ logging.config.dictConfig(LOGGING)
 
 def get_logger():
     logger = logging.getLogger('dl_logger')
-    logger.setLevel(logging.getLevelName(LOG_LEVEL))
+    logger.setLevel(LOG_LEVEL)
     return logger

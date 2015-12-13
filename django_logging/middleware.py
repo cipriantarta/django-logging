@@ -4,7 +4,7 @@ from . import settings
 from .log_object import LogObject, ErrorLogObject, SqlLogObject
 
 
-class DjangoLoggingMiddleware:
+class DjangoLoggingMiddleware(object):
     @staticmethod
     def process_exception(request, exception):
         error = ErrorLogObject(request, exception)
