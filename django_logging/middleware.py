@@ -1,20 +1,19 @@
-from django.db import connection
+from django.db import connections
 from . import log
 from . import settings
 from .log_object import LogObject, ErrorLogObject, SqlLogObject
 
 
 class DjangoLoggingMiddleware(object):
-    @staticmethod
-    def process_exception(request, exception):
+    def process_exception(self, request, exception):
         error = ErrorLogObject(request, exception)
         log.error(error)
         return error.response
 
-    @staticmethod
-    def process_response(request, response):
-        for query in connection.queries:
-            log.debug(SqlLogObject(query))
+    def process_response(self, request, response):
+        for connection in connections.all():
+            self.log_connection_queries(connection)
+
         if request.path_info.startswith(tuple(settings.IGNORED_PATHS)):
             return response
 
@@ -25,3 +24,7 @@ class DjangoLoggingMiddleware(object):
         else:
             log.info(LogObject(request, response))
         return response
+
+    def log_connection_queries(self, connection):
+        for query in connection.queries:
+            log.debug(SqlLogObject(query))
