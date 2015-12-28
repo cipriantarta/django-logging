@@ -202,6 +202,11 @@ Maximum number of rotated log files.
 Change Log
 ==========
 
+master
+------
+
+ - added support for query logging when using multiple database connections
+
 1.3 [2015-12-13]
 ----------------
 
