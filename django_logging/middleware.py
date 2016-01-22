@@ -27,4 +27,4 @@ class DjangoLoggingMiddleware(object):
 
     def log_connection_queries(self, connection):
         for query in connection.queries:
-            log.debug(SqlLogObject(query))
+            log.debug(SqlLogObject(query, connection.alias))

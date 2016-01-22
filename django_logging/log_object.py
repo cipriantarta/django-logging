@@ -143,12 +143,16 @@ class ErrorLogObject(BaseLogObject):
 
 
 class SqlLogObject(object):
-    def __init__(self, query):
+    def __init__(self, query, using=None):
         self.query = query
+        self.using = using
 
     @property
     def to_dict(self):
-        return dict(
+        result = dict(
             duration=self.query['time'],
             query=self.query['sql'],
         )
+        if self.using is not None:
+            result['using'] = self.using
+        return result
