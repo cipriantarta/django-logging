@@ -205,7 +205,10 @@ Change Log
 master
 ------
 
- - added support for query logging when using multiple database connections
+ - bug fixing
+ - added support for query logging when using multiple database
+ - added database alias for sql logs if multiple databases are used
+ - added plain dict logging support
 
 1.3 [2015-12-13]
 ----------------

@@ -8,15 +8,17 @@ from .log_object import LogObject, ErrorLogObject, SqlLogObject
 
 class AppFileHandler(RotatingFileHandler):
     def emit(self, record):
-        if not isinstance(record.msg, LogObject) and not isinstance(record.msg, ErrorLogObject):
+        if not isinstance(record.msg, LogObject)\
+                and not isinstance(record.msg, ErrorLogObject)\
+                and not isinstance(record.msg, dict):
             return
         return super(AppFileHandler, self).emit(record)
 
     def format(self, record):
         created = int(record.created)
-        message = {record.levelname: {created: record.msg.to_dict}}
-
-        return json.dumps(message, sort_keys=True)
+        message = record.msg if isinstance(record.msg, dict) else record.msg.to_dict
+        data = {record.levelname: {created: message}}
+        return json.dumps(data, sort_keys=True)
 
     def rotation_filename(self, default_name):
         return '{}-{}.gz'.format(default_name, time.strftime('%Y%m%d'))
@@ -31,8 +33,16 @@ class AppFileHandler(RotatingFileHandler):
 
 class DebugFileHandler(RotatingFileHandler):
     def emit(self, record):
-        if not isinstance(record.msg, LogObject) and not isinstance(record.msg, ErrorLogObject):
+        if not isinstance(record.msg, LogObject) and \
+                not isinstance(record.msg, ErrorLogObject)\
+                and not isinstance(record.msg, dict):
             return super(DebugFileHandler, self).emit(record)
+
+    def format(self, record):
+        created = int(record.created)
+        message = record.msg if isinstance(record.msg, dict) else record.msg.to_dict
+        data = {record.levelname: {created: message}}
+        return json.dumps(data, sort_keys=True)
 
     def rotation_filename(self, default_name):
         return '{}-{}.gz'.format(default_name, time.strftime('%Y%m%d'))
@@ -50,16 +60,16 @@ class ConsoleHandler(StreamHandler):
         return super(ConsoleHandler, self).emit(record)
 
     def format(self, record):
-        if isinstance(record.msg, LogObject):
+        if isinstance(record.msg, LogObject) or isinstance(record.msg, SqlLogObject):
             created = int(record.created)
             message = {record.levelname: {created: record.msg.to_dict}}
 
             return json.dumps(message, sort_keys=True)
         elif isinstance(record.msg, ErrorLogObject):
             return str(record.msg)
-        elif isinstance(record.msg, SqlLogObject):
+        elif isinstance(record.msg, dict):
             created = int(record.created)
-            message = {record.levelname: {created: record.msg.to_dict}}
+            message = {record.levelname: {created: record.msg}}
             return json.dumps(message, sort_keys=True)
         else:
             return super(ConsoleHandler, self).format(record)

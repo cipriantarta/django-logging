@@ -66,8 +66,12 @@ class LogObject(BaseLogObject):
         result = dict(
             status=self.response.status_code,
             headers=dict(self.response.items()),
-            content=self.response.content.decode(),
         )
+        try:
+            result['content']=self.response.content.decode()
+        except AttributeError:
+            pass
+        
         try:
             result['reason'] = self.response.reason_phrase
         except AttributeError:
@@ -83,6 +87,8 @@ class LogObject(BaseLogObject):
                 result['content'] = json.loads(result['content'])
             except ValueError:
                 del result['content']
+            except AttributeError:
+                pass
 
         for field in result.keys():
             if field not in settings.RESPONSE_FIELDS:
