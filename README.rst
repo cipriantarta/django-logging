@@ -145,65 +145,76 @@ To override Django Logging settings, add a dictionary in your project's settings
     DJANGO_LOGGING = {
         "CONSOLE_LOG": False
     }
+
 Default Settings
 ----------------
 
 .. code-block:: python
 
     CONSOLE_LOG = True
+
 Log to console.
 
 .. code-block:: python
 
     SQL_LOG = True
+
 Log SQL queries.
 
 .. code-block:: python
 
     LOG_LEVEL = 'debug'
+
 If settings.DEBUG is set to True, otherwise LOG_LEVEL is set to 'info'
 
 .. code-block:: python
 
     DISABLE_EXISTING_LOGGERS = True
+
 Set this to False if you want to combine with multiple loggers.
 
 .. code-block:: python
 
     LOG_PATH = '{}/logs'.format(settings.BASE_DIR)
+
 If the logs folder does not exist, it will be created.
 
 .. code-block:: python
 
     IGNORED_PATHS = ['/admin', '/static', '/favicon.ico']
+
 List of URL endpoints to ignore.
 
 .. code-block:: python
 
     RESPONSE_FIELDS = ('status', 'reason', 'charset', 'headers', 'content')
+
 List of response fields to log.
 
 .. code-block:: python
 
     CONTENT_JSON_ONLY = True
+
 Log response content only if its a JSON document.
 
 .. code-block:: python
 
     ROTATE_MB = 100
+
 Maximum size in MB that the log file can have before it gets rotated.
 
 .. code-block:: python
 
     ROTATE_COUNT = 10
+
 Maximum number of rotated log files.
 
 
 Change Log
 ==========
 
-master
-------
+1.4 [2016-02-19]
+----------------
 
  - bug fixing
  - added support for query logging when using multiple database
