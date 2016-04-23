@@ -1,3 +1,6 @@
+.. role:: python(code)
+    :language: python
+
 Django Logging
 ==============
 
@@ -149,69 +152,36 @@ To override Django Logging settings, add a dictionary in your project's settings
 Default Settings
 ----------------
 
-.. code-block:: python
+:python:`CONSOLE_LOG = True` - Log to console.
 
-    CONSOLE_LOG = True
+:python:`SQL_LOG = True` - Log SQL queries.
 
-Log to console.
+:python:`LOG_LEVEL = 'debug'` - If settings.DEBUG is set to True, otherwise LOG_LEVEL is set to 'info'
 
-.. code-block:: python
+:python:`DISABLE_EXISTING_LOGGERS = True` - Set this to False if you want to combine with multiple loggers.
 
-    SQL_LOG = True
+:python:`LOG_PATH = '{}/logs'.format(settings.BASE_DIR)` - If the logs folder does not exist, it will be created.
 
-Log SQL queries.
+:python:`IGNORED_PATHS = ['/admin', '/static', '/favicon.ico']` - List of URL endpoints to ignore.
 
-.. code-block:: python
+:python:`RESPONSE_FIELDS = ('status', 'reason', 'charset', 'headers', 'content')` - List of response fields to log.
 
-    LOG_LEVEL = 'debug'
+:python:`CONTENT_JSON_ONLY = True` - Log response content only if its a JSON document.
 
-If settings.DEBUG is set to True, otherwise LOG_LEVEL is set to 'info'
+:python:`ROTATE_MB = 100` - Maximum size in MB that the log file can have before it gets rotated.
 
-.. code-block:: python
+:python:`ROTATE_COUNT = 10` - Maximum number of rotated log files.
 
-    DISABLE_EXISTING_LOGGERS = True
-
-Set this to False if you want to combine with multiple loggers.
-
-.. code-block:: python
-
-    LOG_PATH = '{}/logs'.format(settings.BASE_DIR)
-
-If the logs folder does not exist, it will be created.
-
-.. code-block:: python
-
-    IGNORED_PATHS = ['/admin', '/static', '/favicon.ico']
-
-List of URL endpoints to ignore.
-
-.. code-block:: python
-
-    RESPONSE_FIELDS = ('status', 'reason', 'charset', 'headers', 'content')
-
-List of response fields to log.
-
-.. code-block:: python
-
-    CONTENT_JSON_ONLY = True
-
-Log response content only if its a JSON document.
-
-.. code-block:: python
-
-    ROTATE_MB = 100
-
-Maximum size in MB that the log file can have before it gets rotated.
-
-.. code-block:: python
-
-    ROTATE_COUNT = 10
-
-Maximum number of rotated log files.
+:python:`INDENT_CONSOLE_LOG = 2` - Indent console log by "n" spaces.
 
 
 Change Log
 ==========
+
+1.5 [2016-xx-xx]
+----------------
+ - console log indentation
+ - elastic search support
 
 1.4 [2016-02-19]
 ----------------

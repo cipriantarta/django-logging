@@ -5,8 +5,6 @@ from django.conf import settings as django_settings
 
 
 class DjangoLoggingSettings(object):
-    __settings = None
-
     def __init__(self):
         user_settings = getattr(django_settings, 'DJANGO_LOGGING', None)
         self.__settings = dict(
@@ -20,7 +18,8 @@ class DjangoLoggingSettings(object):
             RESPONSE_FIELDS=('status', 'reason', 'charset', 'headers', 'content'),
             CONTENT_JSON_ONLY=True,
             ROTATE_MB=100,
-            ROTATE_COUNT=10
+            ROTATE_COUNT=10,
+            INDENT_CONSOLE_LOG=2
         )
 
         try:

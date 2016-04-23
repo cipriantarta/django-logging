@@ -3,6 +3,7 @@ import gzip
 import time
 from logging import StreamHandler
 from logging.handlers import RotatingFileHandler
+from . import settings
 from .log_object import LogObject, ErrorLogObject, SqlLogObject
 
 
@@ -33,6 +34,8 @@ class AppFileHandler(RotatingFileHandler):
 
 class DebugFileHandler(RotatingFileHandler):
     def emit(self, record):
+        import threading
+        print(threading.current_thread().getName())
         if not isinstance(record.msg, LogObject) and \
                 not isinstance(record.msg, ErrorLogObject)\
                 and not isinstance(record.msg, dict):
@@ -64,13 +67,19 @@ class ConsoleHandler(StreamHandler):
             created = int(record.created)
             message = {record.levelname: {created: record.msg.to_dict}}
 
-            return json.dumps(message, sort_keys=True)
+            try:
+                indent = int(settings.INDENT_CONSOLE_LOG)
+            except (ValueError, TypeError):
+                indent = None
+            return json.dumps(message,
+                              sort_keys=True,
+                              indent=indent)
         elif isinstance(record.msg, ErrorLogObject):
             return str(record.msg)
         elif isinstance(record.msg, dict):
             created = int(record.created)
             message = {record.levelname: {created: record.msg}}
-            return json.dumps(message, sort_keys=True)
+            return json.dumps(message, sort_keys=True, indent=2)
         else:
             return super(ConsoleHandler, self).format(record)
 
