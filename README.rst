@@ -182,7 +182,7 @@ Default Settings
 Change Log
 ==========
 
-1.5 [2016-xx-xx]
+1.5 [2016-06-04]
 ----------------
  - do not return a response in process_exception. Give other middlewares a chance to process the exception.
  - console log indentation
