@@ -1,0 +1,14 @@
+elasticsearch-int:
+  image: elasticsearch
+  ports:
+    - 9200:9200
+
+kibana-int:
+  image: kibana
+  ports:
+    - 5601:5601
+  environment:
+    - ELASTICSEARCH_URL=http://elasticsearch-int:9200
+    - NODE_OPTIONS=--max-old-space-size=200
+  links:
+    - elasticsearch-int
