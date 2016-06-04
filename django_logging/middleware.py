@@ -8,7 +8,6 @@ class DjangoLoggingMiddleware(object):
     def process_exception(self, request, exception):
         error = ErrorLogObject(request, exception)
         log.error(error)
-        return error.response
 
     def process_response(self, request, response):
         for connection in connections.all():

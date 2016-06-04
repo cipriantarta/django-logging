@@ -180,6 +180,7 @@ Change Log
 
 1.5 [2016-xx-xx]
 ----------------
+ - do not return a response in process_exception. Give other middlewares a chance to process the exception.
  - console log indentation
  - elastic search support
 
