@@ -10,9 +10,6 @@ It uses the python rotation mechanism to rotate the file logs, but the rotation 
 .. image:: https://badge.fury.io/py/django-logging-json.svg
     :target: https://badge.fury.io/py/django-logging-json
     
-.. image:: https://img.shields.io/pypi/dm/django-logging-json.svg
-    :target: https://img.shields.io/pypi/dm/django-logging-json.svg
-
 Installation
 ============
 
