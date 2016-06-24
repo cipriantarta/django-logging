@@ -90,7 +90,7 @@ class LogObject(BaseLogObject):
             except AttributeError:
                 pass
 
-        for field in result.keys():
+        for field in result.copy().keys():
             if field not in settings.RESPONSE_FIELDS:
                 del result[field]
         return result
