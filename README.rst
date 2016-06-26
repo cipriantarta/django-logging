@@ -9,7 +9,7 @@ It uses the python rotation mechanism to rotate the file logs, but the rotation 
 
 .. image:: https://badge.fury.io/py/django-logging-json.svg
     :target: https://badge.fury.io/py/django-logging-json
-    
+
 Installation
 ============
 
@@ -178,6 +178,10 @@ Default Settings
 
 Change Log
 ==========
+
+1.5.3 [2016-06-26]
+------------------
+- bug fixing
 
 1.5 [2016-06-04]
 ----------------

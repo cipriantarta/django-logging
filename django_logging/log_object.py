@@ -71,7 +71,7 @@ class LogObject(BaseLogObject):
             result['content']=self.response.content.decode()
         except AttributeError:
             pass
-        
+
         try:
             result['reason'] = self.response.reason_phrase
         except AttributeError:
@@ -106,7 +106,7 @@ class ErrorLogObject(BaseLogObject):
     def to_dict(self):
         return dict(
             request=self.format_request(),
-            exception=self.format_exception()
+            exception=ErrorLogObject.format_exception(self.exception)
         )
 
     @classmethod
@@ -115,18 +115,19 @@ class ErrorLogObject(BaseLogObject):
         for i in tb:
             yield {'file': i[0], 'line': i[1], 'method': i[2]}
 
-    def format_exception(self):
+    @classmethod
+    def format_exception(cls, exception):
         result = dict(
-            message=str(self.exception),
-            type=self.exception_type,
+            message=str(exception),
+            type=cls.exception_type(exception),
             traceback=list()
         )
         if sys.version_info[0] == 2:
-            _, _, self.__traceback = traceback.sys.exc_info()
+            _, _, _traceback = traceback.sys.exc_info()
         else:
-            self.__traceback = traceback.TracebackException.from_exception(self.exception).exc_traceback
+            _traceback = traceback.TracebackException.from_exception(exception).exc_traceback
 
-        for line in self.format_traceback(self.__traceback):
+        for line in cls.format_traceback(_traceback):
             result['traceback'].append(line)
         return result
 
@@ -140,12 +141,12 @@ class ErrorLogObject(BaseLogObject):
     def __str__(self):
         return 'Traceback (most recent call last):\n{}{}: {}'.format(
             ''.join(traceback.format_tb(self.__traceback)),
-            self.exception_type, str(self.exception)
+            ErrorLogObject.exception_type(self.exception), str(self.exception)
         )
 
-    @property
-    def exception_type(self):
-        return str(type(self.exception)).split('\'')[1]
+    @classmethod
+    def exception_type(cls, exception):
+        return str(type(exception)).split('\'')[1]
 
 
 class SqlLogObject(object):

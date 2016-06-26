@@ -24,19 +24,26 @@ def send_to_elasticsearch(index, timestamp, level, message):
                 })
         except ConnectionError:
             pass
-        
+
 
 class AppFileHandler(RotatingFileHandler):
     def emit(self, record):
         if not isinstance(record.msg, LogObject)\
                 and not isinstance(record.msg, ErrorLogObject)\
-                and not isinstance(record.msg, dict):
+                and not isinstance(record.msg, dict)\
+                and not isinstance(record.msg, Exception):
             return
+
         return super(AppFileHandler, self).emit(record)
 
     def format(self, record):
         created = int(record.created)
-        message = record.msg if isinstance(record.msg, dict) else record.msg.to_dict
+        if isinstance(record.msg, dict):
+            message = record.msg
+        elif isinstance(record.msg, Exception):
+            message = ErrorLogObject.format_exception(record.msg)
+        else:
+            message = record.msg.to_dict
         data = {record.levelname: {created: message}}
         send_to_elasticsearch("django-logging-app", created, record.levelname, message)
         return json.dumps(data, sort_keys=True)
@@ -54,14 +61,21 @@ class AppFileHandler(RotatingFileHandler):
 
 class DebugFileHandler(RotatingFileHandler):
     def emit(self, record):
-        if not isinstance(record.msg, LogObject) and \
-                not isinstance(record.msg, ErrorLogObject)\
-                and not isinstance(record.msg, dict):
+        if not isinstance(record.msg, LogObject) \
+                and not isinstance(record.msg, ErrorLogObject) \
+                and not isinstance(record.msg, dict) \
+                and not isinstance(record.msg, Exception)\
+                and not isinstance(record.msg, SqlLogObject):
             return super(DebugFileHandler, self).emit(record)
 
     def format(self, record):
         created = int(record.created)
-        message = record.msg if isinstance(record.msg, dict) else record.msg.to_dict
+        if isinstance(record.msg, dict):
+            message = record.msg
+        elif isinstance(record.msg, Exception):
+            message = ErrorLogObject.format_exception(record.msg)
+        else:
+            message = record.msg.to_dict
         data = {record.levelname: {created: message}}
         return json.dumps(data, sort_keys=True)
 

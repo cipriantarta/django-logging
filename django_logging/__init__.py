@@ -3,7 +3,7 @@ from . import logger
 from .log_object import LogObject, ErrorLogObject, SqlLogObject
 
 
-__version__ = '1.5.2'
+__version__ = '1.5.3'
 __author__ = 'Ciprian Tarta'
 
 log = logger.get_logger()
