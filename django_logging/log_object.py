@@ -28,10 +28,8 @@ class BaseLogObject(object):
             meta={key.lower(): str(value) for key, value in self.request.META.items() if key in meta_keys},
             path=self.request.path_info,
         )
-        try:
-            result['scheme'] = self.request.scheme
-        except AttributeError:
-            pass
+
+        result['scheme'] = getattr(self.request, 'scheme', None)
 
         try:
             result['data'] = {key: value for key, value in self.request.data.items()}
@@ -62,33 +60,34 @@ class LogObject(BaseLogObject):
         )
         return result
 
+    @property
+    def content(self):
+        return self.response.content.decode(settings.ENCODING)
+
+    def matching_content_type(self, headers):
+        return (not settings.CONTENT_TYPES) or \
+                (len([t for t in settings.CONTENT_TYPES if t in headers['Content-Type']]) > 0)
+
     def format_response(self):
         result = dict(
-            status=self.response.status_code,
-            headers=dict(self.response.items()),
+            status  = self.response.status_code,
+            headers = dict(self.response.items()),
+            reason  = getattr(self.response, 'reason_phrase', None),
+            charset = getattr(self.response, 'charset', None)
         )
-        try:
-            result['content']=self.response.content.decode()
-        except AttributeError:
-            pass
 
-        try:
-            result['reason'] = self.response.reason_phrase
-        except AttributeError:
-            pass
+        if self.matching_content_type(result['headers']):
+            if settings.CONTENT_JSON_ONLY:
+                try:
+                    result['content'] = json.loads(self.content)
+                except (ValueError, AttributeError):
+                    pass
+            else:
+                try:
+                    result['content'] = self.content
+                except AttributeError:
+                    pass
 
-        try:
-            result['charset'] = self.response.charset
-        except AttributeError:
-            pass
-
-        if settings.CONTENT_JSON_ONLY:
-            try:
-                result['content'] = json.loads(result['content'])
-            except ValueError:
-                del result['content']
-            except AttributeError:
-                pass
 
         for field in result.copy().keys():
             if field not in settings.RESPONSE_FIELDS:
