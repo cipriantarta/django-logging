@@ -36,8 +36,6 @@ class DjangoLoggingSettings(object):
         except TypeError:
             pass
 
-        self.__settings['LOG_PATH'] = os.path.join(django_settings.BASE_DIR, 'logs')
-
         if self.CONTENT_JSON_ONLY:
             self.__settings['CONTENT_TYPES'] = self.CONTENT_TYPES or []
             self.__settings['CONTENT_TYPES'].append('application/json')
