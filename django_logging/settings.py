@@ -17,6 +17,8 @@ class DjangoLoggingSettings(object):
             IGNORED_PATHS=['/admin', '/static', '/favicon.ico'],
             RESPONSE_FIELDS=('status', 'reason', 'charset', 'headers', 'content'),
             CONTENT_JSON_ONLY=True,
+            CONTENT_TYPES=None,
+            ENCODING='ascii',
             ROTATE_MB=100,
             ROTATE_COUNT=10,
             INDENT_CONSOLE_LOG=2,
@@ -33,6 +35,11 @@ class DjangoLoggingSettings(object):
             self.__settings.update(user_settings)
         except TypeError:
             pass
+
+        if self.CONTENT_JSON_ONLY:
+            self.__settings['CONTENT_TYPES'] = self.CONTENT_TYPES or []
+            self.__settings['CONTENT_TYPES'].append('application/json')
+
 
     def __getattr__(self, name):
         return self.__settings.get(name)
