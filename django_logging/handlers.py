@@ -10,6 +10,19 @@ from elasticsearch import Elasticsearch
 from elasticsearch.exceptions import ConnectionError
 
 
+def message_from_record(record):
+    if isinstance(record.msg, dict):
+        message = record.msg
+    elif isinstance(record.msg, Exception):
+        message = ErrorLogObject.format_exception(record.msg)
+    else:
+        try:
+            message = record.msg.to_dict
+        except AttributeError:
+            message = record.msg
+    return message
+
+
 def send_to_elasticsearch(index, timestamp, level, message):
     if settings.ELASTICSEARCH_ENABLED:
         connection = Elasticsearch(hosts=settings.ELASTICSEARCH_HOSTS)
@@ -38,15 +51,9 @@ class AppFileHandler(RotatingFileHandler):
 
     def format(self, record):
         created = int(record.created)
-        if isinstance(record.msg, dict):
-            message = record.msg
-        elif isinstance(record.msg, Exception):
-            message = ErrorLogObject.format_exception(record.msg)
-        else:
-            message = record.msg.to_dict
-        data = {record.levelname: {created: message}}
+        message = message_from_record(record)
         send_to_elasticsearch("django-logging-app", created, record.levelname, message)
-        return json.dumps(data, sort_keys=True)
+        return json.dumps({record.levelname: {created: message}}, sort_keys=True)
 
     def rotation_filename(self, default_name):
         return '{}-{}.gz'.format(default_name, time.strftime('%Y%m%d'))
@@ -70,14 +77,9 @@ class DebugFileHandler(RotatingFileHandler):
 
     def format(self, record):
         created = int(record.created)
-        if isinstance(record.msg, dict):
-            message = record.msg
-        elif isinstance(record.msg, Exception):
-            message = ErrorLogObject.format_exception(record.msg)
-        else:
-            message = record.msg.to_dict
-        data = {record.levelname: {created: message}}
-        return json.dumps(data, sort_keys=True)
+        message = message_from_record(record)
+        send_to_elasticsearch("django-logging-app", created, record.levelname, message)
+        return json.dumps({record.levelname: {created: message}}, sort_keys=True)
 
     def rotation_filename(self, default_name):
         return '{}-{}.gz'.format(default_name, time.strftime('%Y%m%d'))
