@@ -122,10 +122,10 @@ class ErrorLogObject(BaseLogObject):
             type=cls.exception_type(exception),
             traceback=list()
         )
-        if sys.version_info[0] == 2:
-            _, _, _traceback = traceback.sys.exc_info()
-        else:
+        if sys.version_info.major >= 3 and sys.version_info.minor >= 5:
             _traceback = traceback.TracebackException.from_exception(exception).exc_traceback
+        else:
+            _, _, _traceback = traceback.sys.exc_info()
 
         for line in cls.format_traceback(_traceback):
             result['traceback'].append(line)

@@ -178,6 +178,9 @@ Default Settings
 
 Change Log
 ==========
+1.5.4 [2017-02-08]
+------------------
+- fixes compatibility with python < 3.5 when logging exceptions
 
 1.5.3 [2016-06-26]
 ------------------
