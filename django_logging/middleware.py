@@ -1,10 +1,11 @@
 from django.db import connections
+from django.utils.deprecation import MiddlewareMixin
 from . import log
 from . import settings
 from .log_object import LogObject, ErrorLogObject, SqlLogObject
 
 
-class DjangoLoggingMiddleware(object):
+class DjangoLoggingMiddleware(MiddlewareMixin):
     def process_exception(self, request, exception):
         error = ErrorLogObject(request, exception)
         log.error(error)
