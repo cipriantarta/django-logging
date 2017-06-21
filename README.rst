@@ -178,6 +178,10 @@ Default Settings
 
 Change Log
 ==========
+1.5.5 [2017-06-21]
+------------------
+- fixes compatibility for django MIDDLEWARE `django >= 1.10` 
+
 1.5.4 [2017-02-08]
 ------------------
 - fixes compatibility with python < 3.5 when logging exceptions
