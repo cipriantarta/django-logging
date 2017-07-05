@@ -65,8 +65,12 @@ class LogObject(BaseLogObject):
         return self.response.content.decode(settings.ENCODING)
 
     def matching_content_type(self, headers):
-        return (not settings.CONTENT_TYPES) or \
-                (len([t for t in settings.CONTENT_TYPES if t in headers['Content-Type']]) > 0)
+        return (not settings.CONTENT_TYPES) or (
+            'Content-Type' in headers and len(
+                [t for t in settings.CONTENT_TYPES
+                 if t in headers['Content-Type']]
+                ) > 0
+        )
 
     def format_response(self):
         result = dict(
