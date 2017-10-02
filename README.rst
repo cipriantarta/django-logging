@@ -184,6 +184,10 @@ Default Settings
 
 Change Log
 ==========
+1.5.6 [2017-10-02]
+------------------
+- adds support for Elasticsearch SSL connection and authorization
+
 1.5.5 [2017-06-21]
 ------------------
 - fixes compatibility for django MIDDLEWARE `django >= 1.10` 
