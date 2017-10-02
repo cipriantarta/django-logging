@@ -175,6 +175,12 @@ Default Settings
 
 :python:`ELASTICSEARCH_HOSTS = ["localhost"]` - Elasticsearch hosts
 
+:python:`ELASTICSEARCH_INDEX = "django-logging-json"` - Elasticsearch index name
+
+:python:`ELASTICSEARCH_SSL = False` - Elasticsearch connection via SSL (:443)
+
+:python:`ELASTICSEARCH_AUTH = None - Elasticsearch authorization credentials (user, password)
+
 
 Change Log
 ==========

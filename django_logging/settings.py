@@ -23,7 +23,10 @@ class DjangoLoggingSettings(object):
             ROTATE_COUNT=10,
             INDENT_CONSOLE_LOG=2,
             ELASTICSEARCH_ENABLED=False,
-            ELASTICSEARCH_HOSTS=["localhost"]
+            ELASTICSEARCH_SSL=False,
+            ELASTICSEARCH_HOSTS=["localhost"],
+            ELASTICSEARCH_INDEX="django-logging-json",
+            ELASTICSEARCH_AUTH=None
         )
 
         try:
