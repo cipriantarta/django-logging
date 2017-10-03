@@ -2,7 +2,7 @@ import datetime
 import json
 import gzip
 import time
-from logging import StreamHandler
+from logging import StreamHandler, DEBUG
 from logging.handlers import RotatingFileHandler
 from . import settings
 from .log_object import LogObject, ErrorLogObject, SqlLogObject
@@ -20,7 +20,7 @@ def message_from_record(record):
         try:
             message = record.msg.to_dict
         except AttributeError:
-            message = record.msg
+            message = dict(raw=record.msg)
     return message
 
 
@@ -44,15 +44,11 @@ def send_to_elasticsearch(timestamp, level, message):
             pass
 
 
-class AppFileHandler(RotatingFileHandler):
+class DefaultFileHandler(RotatingFileHandler):
     def emit(self, record):
-        if not isinstance(record.msg, LogObject)\
-                and not isinstance(record.msg, ErrorLogObject)\
-                and not isinstance(record.msg, dict)\
-                and not isinstance(record.msg, Exception):
+        if isinstance(record.msg, SqlLogObject):
             return
-
-        return super(AppFileHandler, self).emit(record)
+        return super(DefaultFileHandler, self).emit(record)
 
     def format(self, record):
         created = int(record.created)
@@ -71,30 +67,11 @@ class AppFileHandler(RotatingFileHandler):
             fh_in.truncate()
 
 
-class DebugFileHandler(RotatingFileHandler):
+class DebugFileHandler(DefaultFileHandler):
     def emit(self, record):
-        if not isinstance(record.msg, LogObject) \
-                and not isinstance(record.msg, ErrorLogObject) \
-                and not isinstance(record.msg, dict) \
-                and not isinstance(record.msg, Exception)\
-                and not isinstance(record.msg, SqlLogObject):
-            return super(DebugFileHandler, self).emit(record)
-
-    def format(self, record):
-        created = int(record.created)
-        message = message_from_record(record)
-        send_to_elasticsearch(created, record.levelname, message)
-        return json.dumps({record.levelname: {created: message}}, sort_keys=True)
-
-    def rotation_filename(self, default_name):
-        return '{}-{}.gz'.format(default_name, time.strftime('%Y%m%d'))
-
-    def rotate(self, source, dest):
-        with open(source, 'rb+') as fh_in:
-            with gzip.open(dest, 'wb') as fh_out:
-                fh_out.writelines(fh_in)
-            fh_in.seek(0)
-            fh_in.truncate()
+        if record.levelno != DEBUG:
+            return
+        return super(DebugFileHandler, self).emit(record)
 
 
 class ConsoleHandler(StreamHandler):

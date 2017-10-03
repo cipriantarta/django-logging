@@ -179,11 +179,15 @@ Default Settings
 
 :python:`ELASTICSEARCH_SSL = False` - Elasticsearch connection via SSL (:443)
 
-:python:`ELASTICSEARCH_AUTH = None - Elasticsearch authorization credentials (user, password)
+:python:`ELASTICSEARCH_AUTH = None` - Elasticsearch authorization credentials (user, password)
 
 
 Change Log
 ==========
+1.5.7 [2017-10-03]
+------------------
+- allow "raw" messages to be logged.
+
 1.5.6 [2017-10-02]
 ------------------
 - adds support for Elasticsearch SSL connection and authorization

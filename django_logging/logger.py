@@ -27,7 +27,7 @@ LOGGING = {
     'disable_existing_loggers': settings.DISABLE_EXISTING_LOGGERS,
     'formatters': {
         'verbose': {
-            'format': '[%(levelname)s - %(created)s], file:%(module)s.py, func:%(funcName)s, ln:%(lineno)s: %(message)s'
+            'format': '[%(levelname)s - %(created)s] file:%(module)s.py, func:%(funcName)s, ln:%(lineno)s: %(message)s'
         },
         'simple': {
             'format': '%(message)s'
@@ -45,7 +45,7 @@ LOGGING = {
         },
         'default': {
             'level': 'INFO',
-            'class': 'django_logging.handlers.AppFileHandler',
+            'class': 'django_logging.handlers.DefaultFileHandler',
             'formatter': 'verbose',
             'maxBytes': settings.ROTATE_MB * 1024 * 1024,
             'backupCount': settings.ROTATE_COUNT,
