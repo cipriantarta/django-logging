@@ -19,6 +19,7 @@ def message_from_record(record):
     else:
         try:
             message = record.msg.to_dict
+            message["raw"] = str(message)
         except AttributeError:
             message = dict(raw=record.msg)
     return message

@@ -184,7 +184,7 @@ Default Settings
 
 Change Log
 ==========
-1.5.7 [2017-10-03]
+1.5.8 [2017-10-03]
 ------------------
 - allow "raw" messages to be logged.
 
