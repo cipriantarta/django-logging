@@ -184,6 +184,11 @@ Default Settings
 
 Change Log
 ==========
+1.5.9 [2017-10-19]
+------------------
+- adds "raw" to exception messages
+- uses pprint instead of json dumps for console output
+
 1.5.8 [2017-10-03]
 ------------------
 - allow "raw" messages to be logged.

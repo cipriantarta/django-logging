@@ -122,6 +122,7 @@ class ErrorLogObject(BaseLogObject):
     def format_exception(cls, exception):
         result = dict(
             message=str(exception),
+            raw=str(exception),
             type=cls.exception_type(exception),
             traceback=list()
         )
@@ -162,6 +163,7 @@ class SqlLogObject(object):
         result = dict(
             duration=self.query['time'],
             query=self.query['sql'],
+            raw=str(self.query)
         )
         if self.using is not None:
             result['using'] = self.using
