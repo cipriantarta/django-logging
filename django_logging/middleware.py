@@ -11,9 +11,6 @@ class DjangoLoggingMiddleware(MiddlewareMixin):
         log.error(error)
 
     def process_response(self, request, response):
-        for connection in connections.all():
-            self.log_connection_queries(connection)
-
         if request.path_info.startswith(tuple(settings.IGNORED_PATHS)):
             return response
 
@@ -25,6 +22,8 @@ class DjangoLoggingMiddleware(MiddlewareMixin):
             log.info(LogObject(request, response))
         return response
 
-    def log_connection_queries(self, connection):
-        for query in connection.queries:
-            log.debug(SqlLogObject(query, connection.alias))
+    def log_connection_queries(self):
+        for connection in connections.all():
+            self.log_connection_queries(connection)
+            for query in connection.queries:
+                log.debug(SqlLogObject(query, connection.alias))

@@ -15,7 +15,7 @@ class BaseLogObject(object):
     def __init__(self, request):
         self.request = request
 
-    @abc.abstractproperty
+    @property
     def to_dict(self):
         raise NotImplementedError
 
@@ -74,10 +74,10 @@ class LogObject(BaseLogObject):
 
     def format_response(self):
         result = dict(
-            status  = self.response.status_code,
-            headers = dict(self.response.items()),
-            reason  = getattr(self.response, 'reason_phrase', None),
-            charset = getattr(self.response, 'charset', None)
+            status=self.response.status_code,
+            headers=dict(self.response.items()),
+            reason=getattr(self.response, 'reason_phrase', None),
+            charset=getattr(self.response, 'charset', None)
         )
 
         if self.matching_content_type(result['headers']):
@@ -91,7 +91,6 @@ class LogObject(BaseLogObject):
                     result['content'] = self.content
                 except AttributeError:
                     pass
-
 
         for field in result.copy().keys():
             if field not in settings.RESPONSE_FIELDS:
@@ -122,10 +121,11 @@ class ErrorLogObject(BaseLogObject):
     def format_exception(cls, exception):
         result = dict(
             message=str(exception),
-            raw=str(exception),
             type=cls.exception_type(exception),
             traceback=list()
         )
+        if not settings.DEBUG:
+            result["raw"] = str(exception)
         if sys.version_info.major >= 3 and sys.version_info.minor >= 5:
             _traceback = traceback.TracebackException.from_exception(exception).exc_traceback
         else:
@@ -163,8 +163,9 @@ class SqlLogObject(object):
         result = dict(
             duration=self.query['time'],
             query=self.query['sql'],
-            raw=str(self.query)
         )
+        if not settings.DEBUG:
+            result["raw"] = str(self.query)
         if self.using is not None:
             result['using'] = self.using
         return result

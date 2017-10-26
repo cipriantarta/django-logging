@@ -25,6 +25,11 @@ if not os.path.exists(settings.LOG_PATH):
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': settings.DISABLE_EXISTING_LOGGERS,
+    'filters': {
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse',
+            },
+    },
     'formatters': {
         'verbose': {
             'format': '[%(levelname)s - %(created)s] file:%(module)s.py, func:%(funcName)s, ln:%(lineno)s: %(message)s'
@@ -72,7 +77,7 @@ LOGGING = {
         'dl_logger': {
             'handlers': LOG_HANDLERS,
             'level': LOG_LEVEL,
-            'propagate': True
+            'propagate': True,
         },
     }
 }

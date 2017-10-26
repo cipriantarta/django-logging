@@ -13,15 +13,15 @@ import certifi
 
 def message_from_record(record):
     if isinstance(record.msg, dict):
-        message = record.msg
+        message = dict(raw=record.msg)
     elif isinstance(record.msg, Exception):
         message = ErrorLogObject.format_exception(record.msg)
     else:
         try:
             message = record.msg.to_dict
-            message["raw"] = str(message)
         except AttributeError:
-            message = dict(raw=record.msg)
+            url = "https://github.com/cipriantarta/django-logging/issues"
+            return dict(raw="Unable to parse LogObject. Please file in a bug at: %s" % url)
     return message
 
 
@@ -49,12 +49,13 @@ class DefaultFileHandler(RotatingFileHandler):
     def emit(self, record):
         if isinstance(record.msg, SqlLogObject):
             return
-        return super(DefaultFileHandler, self).emit(record)
+        super(DefaultFileHandler, self).emit(record)
+        message = self.format(record)
+        send_to_elasticsearch(int(record.created), record.levelname, message)
 
     def format(self, record):
         created = int(record.created)
         message = message_from_record(record)
-        send_to_elasticsearch(created, record.levelname, message)
         return json.dumps({record.levelname: {created: message}}, sort_keys=True)
 
     def rotation_filename(self, default_name):
@@ -87,7 +88,7 @@ class ConsoleHandler(StreamHandler):
             try:
                 indent = int(settings.INDENT_CONSOLE_LOG)
             except (ValueError, TypeError):
-                indent = None
+                indent = 1
             import pprint
             message = pprint.pformat(message, indent, 160, compact=True)
             return message
@@ -105,12 +106,13 @@ class SQLFileHandler(RotatingFileHandler):
     def emit(self, record):
         if not isinstance(record.msg, SqlLogObject):
             return
-        return super(SQLFileHandler, self).emit(record)
+        super(SQLFileHandler, self).emit(record)
+        message = self.format(record)
+        send_to_elasticsearch(int(record.created), record.levelname, message)
 
     def format(self, record):
         created = int(record.created)
         message = {record.levelname: {created: record.msg.to_dict}}
-        send_to_elasticsearch(created, record.levelname, message)
         return json.dumps(message, sort_keys=True)
 
     def rotation_filename(self, default_name):

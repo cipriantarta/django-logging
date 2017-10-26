@@ -151,7 +151,7 @@ Default Settings
 
 :python:`CONSOLE_LOG = True` - Log to console.
 
-:python:`SQL_LOG = True` - Log SQL queries.
+:python:`SQL_LOG = True` - Log SQL queries
 
 :python:`LOG_LEVEL = 'debug'` - If settings.DEBUG is set to True, otherwise LOG_LEVEL is set to 'info'
 
@@ -184,6 +184,11 @@ Default Settings
 
 Change Log
 ==========
+1.6 [2017-10-19]
+----------------
+- fixes a bug where messages were being sent to elasticsearch twice
+- logs sql queries from scripts(managements commands, etc.) instead of just from a web request
+
 1.5.9 [2017-10-19]
 ------------------
 - adds "raw" to exception messages
