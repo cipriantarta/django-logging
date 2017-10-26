@@ -184,6 +184,10 @@ Default Settings
 
 Change Log
 ==========
+1.7 [2017-10-26]
+----------------
+- log sql queries in DEBUG mode as well
+
 1.6 [2017-10-26]
 ----------------
 - fixes a bug where messages were being sent to elasticsearch twice
