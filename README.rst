@@ -184,9 +184,9 @@ Default Settings
 
 Change Log
 ==========
-1.8 [2017-10-26]
+1.9 [2017-10-26]
 ----------------
-- fixes an es bug with record formatting
+- adds send to es onf a different thread
 
 1.7 [2017-10-26]
 ----------------

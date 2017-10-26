@@ -4,6 +4,8 @@ import gzip
 import time
 from logging import StreamHandler, DEBUG
 from logging.handlers import RotatingFileHandler
+from threading import Thread
+
 from . import settings
 from .log_object import LogObject, ErrorLogObject, SqlLogObject
 from elasticsearch import Elasticsearch
@@ -26,6 +28,10 @@ def message_from_record(record):
 
 
 def send_to_elasticsearch(timestamp, level, message):
+    Thread(target=__send_to_es, args=(timestamp, level, message)).start()
+
+
+def __send_to_es(timestamp, level, message):
     index = settings.ELASTICSEARCH_INDEX
     if settings.ELASTICSEARCH_ENABLED:
         conn = Elasticsearch(hosts=settings.ELASTICSEARCH_HOSTS,
