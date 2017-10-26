@@ -49,11 +49,14 @@ class DjangoLoggingSettings(object):
         from django.db.backends.signals import connection_created
         connection_created.connect(self.force_sql_logging)
 
-    def force_sql_logging(self, sender, signal, connection):
+    def force_sql_logging(self, *args, **kwargs):
+        connection = kwargs.get("connection")
+
         def get_cursor(cursor):
             from .cursor_wrapper import CursorLogWrapper
             return CursorLogWrapper(cursor, connection)
         connection.make_cursor = get_cursor
+        connection.make_debug_cursor = get_cursor
 
     def __getattr__(self, name):
         return self.__settings.get(name)

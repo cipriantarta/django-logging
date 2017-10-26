@@ -12,7 +12,7 @@ import certifi
 
 
 def message_from_record(record):
-    if isinstance(record.msg, dict):
+    if isinstance(record.msg, dict) or isinstance(record.msg, str):
         message = dict(raw=record.msg)
     elif isinstance(record.msg, Exception):
         message = ErrorLogObject.format_exception(record.msg)

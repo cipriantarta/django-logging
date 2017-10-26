@@ -184,7 +184,7 @@ Default Settings
 
 Change Log
 ==========
-1.6 [2017-10-19]
+1.6 [2017-10-26]
 ----------------
 - fixes a bug where messages were being sent to elasticsearch twice
 - logs sql queries from scripts(managements commands, etc.) instead of just from a web request
