@@ -48,15 +48,17 @@ class BaseLogObject(object):
 
 
 class LogObject(BaseLogObject):
-    def __init__(self, request, response):
+    def __init__(self, request, response, duration):
         super(LogObject, self).__init__(request)
         self.response = response
+        self.duration = duration
 
     @property
     def to_dict(self):
         result = dict(
             request=self.format_request(),
-            response=self.format_response()
+            response=self.format_response(),
+            duration=self.duration
         )
         return result
 
@@ -99,16 +101,18 @@ class LogObject(BaseLogObject):
 
 
 class ErrorLogObject(BaseLogObject):
-    def __init__(self, request, exception):
+    def __init__(self, request, exception, duration):
         super(ErrorLogObject, self).__init__(request)
         self.exception = exception
         self.__traceback = None
+        self.duration = duration
 
     @property
     def to_dict(self):
         return dict(
             request=self.format_request(),
-            exception=ErrorLogObject.format_exception(self.exception)
+            exception=ErrorLogObject.format_exception(self.exception),
+            duration=self.duration
         )
 
     @classmethod
@@ -161,7 +165,7 @@ class SqlLogObject(object):
     @property
     def to_dict(self):
         result = dict(
-            duration=self.query['time'],
+            duration=float(self.query['time']),
             query=self.query['sql'],
         )
         if not settings.DEBUG:

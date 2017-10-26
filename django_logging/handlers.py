@@ -33,9 +33,10 @@ def send_to_elasticsearch(timestamp, level, message):
                              http_auth=settings.ELASTICSEARCH_AUTH,
                              verify_certs=settings.ELASTICSEARCH_SSL)
         try:
+            message = json.loads(message).get(level).get(str(timestamp))
             conn.index(
                 index="{}".format(index),
-                doc_type="log_object",
+                doc_type="log_objects",
                 body={
                     "date": datetime.datetime.fromtimestamp(timestamp).isoformat(),
                     "level": level,

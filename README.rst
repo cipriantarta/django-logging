@@ -131,7 +131,7 @@ To log handled exceptions:
 
     from django_logging import log, ErrorLogObject
 
-    log.error(ErrorLogObject(request, exception))
+    log.error(ErrorLogObject(request, exception, duration))
 
 
 Settings
@@ -184,6 +184,10 @@ Default Settings
 
 Change Log
 ==========
+1.8 [2017-10-26]
+----------------
+- fixes an es bug with record formatting
+
 1.7 [2017-10-26]
 ----------------
 - log sql queries in DEBUG mode as well
