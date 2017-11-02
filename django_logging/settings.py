@@ -11,6 +11,7 @@ class DjangoLoggingSettings(object):
             DEBUG=django_settings.DEBUG,
             CONSOLE_LOG=True,
             SQL_LOG=True,
+            SQL_THRESHOLD=0.5,
             LOG_LEVEL='debug' if django_settings.DEBUG else 'info',
             DISABLE_EXISTING_LOGGERS=True,
             IGNORED_PATHS=['/admin', '/static', '/favicon.ico'],

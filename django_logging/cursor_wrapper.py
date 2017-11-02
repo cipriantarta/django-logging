@@ -3,7 +3,7 @@ from threading import Thread
 from time import time
 from django.db.backends.utils import CursorWrapper
 
-from .log_object import SqlLogObject
+from .log_object import SqlLogObject, settings
 log = logging.getLogger('dl_logger')
 
 
@@ -23,6 +23,8 @@ class CursorLogWrapper(CursorWrapper):
             duration = stop - start
 
             def do_log(cursor, *log_args):
+                if duration < settings.SQL_THRESHOLD:
+                    return
                 sql = self.db.ops.last_executed_query(cursor, *log_args)
                 record = SqlLogObject({
                     'sql': sql,

@@ -151,7 +151,9 @@ Default Settings
 
 :python:`CONSOLE_LOG = True` - Log to console.
 
-:python:`SQL_LOG = True` - Log SQL queries
+:python:`SQL_LOG = True` - Log SQL queries.
+
+:python:`SQL_THRESHOLD = 0.5` - Log slow queries only.
 
 :python:`LOG_LEVEL = 'debug'` - If settings.DEBUG is set to True, otherwise LOG_LEVEL is set to 'info'
 
@@ -184,6 +186,10 @@ Default Settings
 
 Change Log
 ==========
+1.10 [2017-11-02]
+----------------
+- adds a 0.5 threshold for SQL queries to be logged. Spamming the logs with fast queries is unnecessary
+
 1.9 [2017-10-26]
 ----------------
 - adds send to es onf a different thread
