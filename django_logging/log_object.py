@@ -61,7 +61,7 @@ class LogObject(BaseLogObject):
             duration=self.duration
         )
         if not settings.DEBUG:
-            result["raw"] = str(self.result)
+            result["raw"] = str(result)
         return result
 
     @property
@@ -118,7 +118,7 @@ class ErrorLogObject(BaseLogObject):
         )
 
         if not settings.DEBUG:
-            result["raw"] = str(self.result)
+            result["raw"] = str(result)
         return result
 
     @classmethod
