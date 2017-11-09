@@ -26,9 +26,11 @@ class CursorLogWrapper(CursorWrapper):
                 if duration < settings.SQL_THRESHOLD:
                     return
                 sql = self.db.ops.last_executed_query(cursor, *log_args)
-                record = SqlLogObject({
+                sql_info = {
                     'sql': sql,
-                    'time': "%.3f" % duration,
-                })
+                    'time': "%.3f" % duration
+                }
+                self.db.queries_log.append(sql_info)
+                record = SqlLogObject(sql_info)
                 log.info(record)
             Thread(target=do_log, args=(self.cursor, *args)).start()

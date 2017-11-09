@@ -181,11 +181,15 @@ Default Settings
 
 :python:`ELASTICSEARCH_SSL = False` - Elasticsearch connection via SSL (:443)
 
-:python:`ELASTICSEARCH_AUTH = None` - Elasticsearch authorization credentials (user, password)
+:python:`ELASTICSEARCH_AUTH = ('user', 'password)` - Elasticsearch authorization credentials (user, password). Defaults to `None`
 
 
 Change Log
 ==========
+1.11 [2017-11-09]
+-----------------
+- bug fixes
+
 1.10 [2017-11-02]
 ----------------
 - adds a 0.5 threshold for SQL queries to be logged. Spamming the logs with fast queries is unnecessary

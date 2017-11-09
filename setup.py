@@ -49,6 +49,6 @@ setup(
     install_requires=[
         'django>=1.4',
         'six',
-        'elasticsearch>=2.0.0,<3.0.0',
+        'elasticsearch>=2.0.0'
     ]
 )

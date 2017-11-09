@@ -10,7 +10,6 @@ from . import settings
 from .log_object import LogObject, ErrorLogObject, SqlLogObject
 from elasticsearch import Elasticsearch
 from elasticsearch.exceptions import ConnectionError
-import certifi
 
 
 def message_from_record(record):

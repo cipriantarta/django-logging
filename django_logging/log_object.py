@@ -60,6 +60,8 @@ class LogObject(BaseLogObject):
             response=self.format_response(),
             duration=self.duration
         )
+        if not settings.DEBUG:
+            result["raw"] = str(self.result)
         return result
 
     @property
@@ -109,11 +111,15 @@ class ErrorLogObject(BaseLogObject):
 
     @property
     def to_dict(self):
-        return dict(
+        result = dict(
             request=self.format_request(),
             exception=ErrorLogObject.format_exception(self.exception),
             duration=self.duration
         )
+
+        if not settings.DEBUG:
+            result["raw"] = str(self.result)
+        return result
 
     @classmethod
     def format_traceback(cls, tb):
