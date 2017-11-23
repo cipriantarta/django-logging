@@ -34,8 +34,8 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Software Development :: Libraries :: Python Modules',
         "Framework :: Django",
         "Framework :: Django :: 1.4",
@@ -44,11 +44,13 @@ setup(
         "Framework :: Django :: 1.7",
         "Framework :: Django :: 1.8",
         "Framework :: Django :: 1.9",
+        "Framework :: Django :: 1.10",
     ],
     keywords='django logging json',
     install_requires=[
         'django>=1.4',
         'six',
-        'elasticsearch>=2.0.0'
+        'elasticsearch>=2.0.0',
+        'certify'
     ]
 )
