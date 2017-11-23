@@ -6,6 +6,8 @@ from logging import StreamHandler, DEBUG
 from logging.handlers import RotatingFileHandler
 from threading import Thread
 
+import certifi
+
 from . import settings
 from .log_object import LogObject, ErrorLogObject, SqlLogObject
 from elasticsearch import Elasticsearch
@@ -39,7 +41,8 @@ def __send_to_es(timestamp, level, message):
         conn = Elasticsearch(hosts=settings.ELASTICSEARCH_HOSTS,
                              use_ssl=settings.ELASTICSEARCH_SSL,
                              http_auth=settings.ELASTICSEARCH_AUTH,
-                             verify_certs=settings.ELASTICSEARCH_SSL)
+                             verify_certs=settings.ELASTICSEARCH_SSL,
+                             ca_certs=certifi.where())
         try:
             message = json.loads(message).get(level).get(str(timestamp))
             conn.index(

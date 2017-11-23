@@ -186,7 +186,7 @@ Default Settings
 
 Change Log
 ==========
-1.14 [2017-11-23]
+1.15 [2017-11-23]
 -----------------
 - adds certifi to required packages
 - removes python 3.4 support and adds python 3.6
