@@ -151,6 +151,8 @@ Default Settings
 
 :python:`CONSOLE_LOG = True` - Log to console.
 
+:python:`FILE_LOG = True` - Log to file.
+
 :python:`SQL_LOG = True` - Log SQL queries.
 
 :python:`SQL_THRESHOLD = 0.5` - Log slow queries only.
@@ -172,6 +174,8 @@ Default Settings
 :python:`ROTATE_COUNT = 10` - Maximum number of rotated log files.
 
 :python:`INDENT_CONSOLE_LOG = 2` - Indent console log by "n" spaces.
+
+:python:`MINIFY_CONSOLE_LOG = False` - If true print console log without spaces and line breaks.
 
 :python:`ELASTICSEARCH_ENABLED = False` - Set to yes to enable elasticsearch support.
 
