@@ -58,3 +58,10 @@ docs/_build/
 target/
 ./logs
 .idea/
+
+# Vscode
+.vscode/
+
+# pipenv
+Pipfile
+Pipfile.lock

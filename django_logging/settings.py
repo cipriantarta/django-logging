@@ -10,6 +10,7 @@ class DjangoLoggingSettings(object):
         self.__settings = dict(
             DEBUG=django_settings.DEBUG,
             CONSOLE_LOG=True,
+            FILE_LOG=True,
             SQL_LOG=True,
             SQL_THRESHOLD=0.5,
             LOG_LEVEL='debug' if django_settings.DEBUG else 'info',
@@ -22,6 +23,7 @@ class DjangoLoggingSettings(object):
             ROTATE_MB=100,
             ROTATE_COUNT=10,
             INDENT_CONSOLE_LOG=2,
+            MINIFY_CONSOLE_LOG=False,
             ELASTICSEARCH_ENABLED=False,
             ELASTICSEARCH_SSL=False,
             ELASTICSEARCH_HOSTS=["localhost"],
@@ -61,6 +63,6 @@ class DjangoLoggingSettings(object):
 
     def __getattr__(self, name):
         return self.__settings.get(name)
-            
+
 
 sys.modules[__name__] = DjangoLoggingSettings()

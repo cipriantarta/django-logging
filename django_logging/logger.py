@@ -7,8 +7,10 @@ import sys
 from . import settings
 
 LOG_LEVEL = settings.LOG_LEVEL.upper()
-LOG_HANDLERS = ['default']
+LOG_HANDLERS = []
 
+if settings.FILE_LOG:
+    LOG_HANDLERS.append('default')
 if settings.CONSOLE_LOG:
     LOG_HANDLERS.append('console')
 if settings.DEBUG:
@@ -16,11 +18,12 @@ if settings.DEBUG:
 if settings.SQL_LOG:
     LOG_HANDLERS.append('sql')
 
-if not os.path.exists(settings.LOG_PATH):
-    try:
-        os.makedirs(settings.LOG_PATH)
-    except Exception as e:
-        raise Exception('Unable to configure logger. Can\'t create LOG_PATH: {}'.format(settings.LOG_PATH))
+if settings.FILE_LOG or settings.DEBUG or settings.SQL_LOG:
+    if not os.path.exists(settings.LOG_PATH):
+        try:
+            os.makedirs(settings.LOG_PATH)
+        except Exception as e:
+            raise Exception('Unable to configure logger. Can\'t create LOG_PATH: {}'.format(settings.LOG_PATH))
 
 LOGGING = {
     'version': 1,

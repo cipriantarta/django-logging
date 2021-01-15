@@ -101,8 +101,11 @@ class ConsoleHandler(StreamHandler):
                 indent = int(settings.INDENT_CONSOLE_LOG)
             except (ValueError, TypeError):
                 indent = 1
-            import pprint
-            message = pprint.pformat(message, indent, 160, compact=True)
+            if settings.MINIFY_CONSOLE_LOG:
+                message = json.dumps(message, separators=(',', ':'), indent=None)
+            else:    
+                import pprint
+                message = pprint.pformat(message, indent, 160, compact=True)
             return message
         elif isinstance(record.msg, ErrorLogObject):
             return str(record.msg)
@@ -136,4 +139,3 @@ class SQLFileHandler(RotatingFileHandler):
                 fh_out.writelines(fh_in)
             fh_in.seek(0)
             fh_in.truncate()
-
